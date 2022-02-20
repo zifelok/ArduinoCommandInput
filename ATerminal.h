@@ -26,7 +26,7 @@ public:
     CommandParser(char *buffer, int16_t bufferSize, char *commandEnding = "\r\n");
     void write(char c);
     void write(char *command);
-    void resetBuffer();
+    void reset();
     void setCallback(void (*callback)(int));
 
 private:
@@ -36,10 +36,28 @@ private:
     char *_commandEnding;
     int16_t _bufferEnd;
     int8_t _endingCount;
+    int8_t _commandSize;
     
     
     void endOfCommand();
     
+};
+
+class Command
+{
+public:
+    Command(char *buffer, int16_t bufferSize, int8_t commandSize);
+    void reset();
+    bool hasNext();
+    bool moveNext();
+    char * current();
+    int8_t getSize();
+private:
+    char *_buffer;
+    int16_t _bufferSize;
+    int8_t _commandSize;
+    int8_t _commandIndex;
+    char *_argPointer;
 };
 
 #endif

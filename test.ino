@@ -1,27 +1,36 @@
 #include "ATerminal.h"
+#include <AUnit.h>
 
-char *buffer = new char[64];
-CommandParser parser = CommandParser(buffer, 64);
+char *commandBuffer = new char[64]{'1', '2', '\0', 'a', '\0', 'g', '1', '\0', 'r'};
+Command testCommand = Command(commandBuffer, 64, 3);
 
-void commandCallback(int i)
+test(command_keeps_size)
 {
-  Serial.println(i);
+  assertEqual(3, testCommand.getSize());
+}
+
+test(command_iterator_works)
+{
+  testCommand.reset();
+  for (int8_t i = 0; i < 7; ++i)
+  {
+    assertEqual("12", testCommand.current());
+    assertEqual(true, testCommand.moveNext());
+    assertEqual("a", testCommand.current());
+    assertEqual(true, testCommand.moveNext());
+    assertEqual("g1", testCommand.current());
+    assertEqual(false, testCommand.moveNext());
+    testCommand.reset();
+  }
 }
 
 void setup()
 {
   Serial.begin(115200);
-  parser.setCallback(&commandCallback);
-  parser.write("test");
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 // the loop function runs over and over again forever
 void loop()
 {
-  digitalWrite(LED_BUILTIN, HIGH); // turn the LED on (HIGH is the voltage level)
-  delay(1000);                     // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);  // turn the LED off by making the voltage LOW
-  delay(1000);                     // wait for a second
+  aunit::TestRunner::run();
 }
