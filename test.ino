@@ -1,6 +1,11 @@
 #include "ATerminal.h"
 
+char *buffer = new char[64];
+CommandParser parser = CommandParser(buffer, 64);
+
 void setup() {
+  Serial.begin(115200);
+  parser.write("test");
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
 }
