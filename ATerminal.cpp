@@ -28,6 +28,7 @@ void CommandParser::resetBuffer()
 void CommandParser::write(char c)
 {
     Serial.println(c);
+    endOfCommand();
     // Detect end of command \0 or \r\n
     // endOfCommand();
 
@@ -36,7 +37,6 @@ void CommandParser::write(char c)
     // Detect special chars in str
 
     // Detect spaces
-
 
     /*
     char *nextEndingChar = _commandEnding + _endingCount;
@@ -72,5 +72,14 @@ void CommandParser::write(char c)
 
 void CommandParser::endOfCommand()
 {
+    if (_callback == NULL)
+        Serial.println("NULL");
+    else
+        _callback(5);
     resetBuffer();
+}
+
+void CommandParser::setCallback(void (*callback)(int))
+{
+    _callback = callback;
 }

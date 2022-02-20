@@ -27,8 +27,10 @@ public:
     void write(char c);
     void write(char *command);
     void resetBuffer();
+    void setCallback(void (*callback)(int));
 
 private:
+    void (*_callback)(int);
     char *_buffer;
     int16_t _bufferSize;
     char *_commandEnding;
