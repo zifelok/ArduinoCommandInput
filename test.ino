@@ -14,11 +14,11 @@ test(command_iterator_works)
   testCommand.reset();
   for (int8_t i = 0; i < 7; ++i)
   {
-    assertEqual("12", testCommand.current());
+    assertEqual(F("12"), testCommand.current());
     assertEqual(true, testCommand.moveNext());
-    assertEqual("a", testCommand.current());
+    assertEqual(F("a"), testCommand.current());
     assertEqual(true, testCommand.moveNext());
-    assertEqual("g1", testCommand.current());
+    assertEqual(F("g1"), testCommand.current());
     assertEqual(false, testCommand.moveNext());
     testCommand.reset();
   }
