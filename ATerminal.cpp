@@ -7,7 +7,7 @@ CommandParser::CommandParser(char *buffer, int16_t bufferSize, char *commandEndi
     _commandEnding = commandEnding;
 }
 
-void CommandParser::write(char *command)
+void CommandParser::parse(char *command)
 {
     Serial.println(command);
     int16_t i = 0;
@@ -28,9 +28,9 @@ void CommandParser::reset()
 
 void CommandParser::write(char c)
 {
-    Serial.println(c);
-    endOfCommand();
     // Detect end of command \0 or \r\n
+    endOfCommand();
+
     // endOfCommand();
 
     // Detect "
@@ -38,57 +38,35 @@ void CommandParser::write(char c)
     // Detect special chars in str
 
     // Detect spaces
+}
 
-    /*
-    char *nextEndingChar = _commandEnding + _endingCount;
-    if (nextEndingChar == '\0')
-    {
-        endOfCommand();
-        return;
-    }
+bool CommandParser::putToBuffer(char c)
+{
+    // Detect "
 
-    if (c == nextEndingChar)
-    {
-        _endingCount++;
-        return;
-    }
+    // Detect special chars in str
 
-    char *lastChar = '\0';
-    if (_bufferEnd > 0)
-        *lastChar = _buffer + _bufferEnd;
-    char *nextChar = _buffer + _bufferEnd + 1;
-    if (c == ' ' || c == '\t')
-    {
-        if (lastChar != '\0')
-        {
-            nextChar = '\0';
-            _bufferEnd++;
-        }
-    }else if(c == '\"'){
-
-    }
-    _endingCount = 0;
-    */
+    // Detect spaces
 }
 
 void CommandParser::endOfCommand()
 {
-    if (_callback == NULL)
-        Serial.println("NULL");
-    else
-        _callback(5);
+    if (_callback != NULL)
+    {
+        Command command = Command(_buffer, _commandSize);
+        _callback(command);
+    }
     reset();
 }
 
-void CommandParser::setCallback(void (*callback)(int))
+void CommandParser::setCallback(void (*callback)(Command))
 {
     _callback = callback;
 }
 
-Command::Command(char *buffer, int16_t bufferSize, int8_t commandSize)
+Command::Command(char *buffer, int8_t commandSize)
 {
     _buffer = buffer;
-    _bufferSize = bufferSize;
     _commandSize = commandSize;
     reset();
 }

@@ -2,62 +2,44 @@
 #define ATerminal_h
 
 #include "Arduino.h"
-/*
-class ATerminal
+
+class Command
 {
 public:
-    ATerminal(Stream *serial, char *buffer, int16_t bufferSize, char *term = "\r\n");
-    void iterate();
+    Command(char *buffer, int8_t commandSize);
+    void reset();
+    bool hasNext();
+    bool moveNext();
+    char *current();
+    int8_t getSize();
 
 private:
-    Stream *_serial;
     char *_buffer;
-    int16_t _bufferSize;
-    char *_term;
-    int16_t _pointer;
-
-    void resetBuffer();
-    void putInBuffer(char c);
+    int8_t _commandSize;
+    int8_t _commandIndex;
+    char *_argPointer;
 };
-*/
+
 class CommandParser
 {
 public:
     CommandParser(char *buffer, int16_t bufferSize, char *commandEnding = "\r\n");
     void write(char c);
-    void write(char *command);
+    void parse(char *command);
     void reset();
-    void setCallback(void (*callback)(int));
+    void setCallback(void (*callback)(Command));
 
 private:
-    void (*_callback)(int);
+    void (*_callback)(Command);
     char *_buffer;
     int16_t _bufferSize;
     char *_commandEnding;
     int16_t _bufferEnd;
     int8_t _endingCount;
     int8_t _commandSize;
-    
-    
-    void endOfCommand();
-    
-};
 
-class Command
-{
-public:
-    Command(char *buffer, int16_t bufferSize, int8_t commandSize);
-    void reset();
-    bool hasNext();
-    bool moveNext();
-    char * current();
-    int8_t getSize();
-private:
-    char *_buffer;
-    int16_t _bufferSize;
-    int8_t _commandSize;
-    int8_t _commandIndex;
-    char *_argPointer;
+    void endOfCommand();
+    bool putToBuffer(char c);
 };
 
 #endif

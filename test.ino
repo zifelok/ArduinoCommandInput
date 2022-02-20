@@ -2,7 +2,7 @@
 #include <AUnit.h>
 
 char *commandBuffer = new char[64]{'1', '2', '\0', 'a', '\0', 'g', '1', '\0', 'r'};
-Command testCommand = Command(commandBuffer, 64, 3);
+Command testCommand = Command(commandBuffer, 3);
 
 test(command_keeps_size)
 {
