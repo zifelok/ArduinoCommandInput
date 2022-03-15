@@ -21,8 +21,7 @@ test(parse_append_puts_in_buffer)
   Command c = cp.parse();
 
   assertEqual(1, c.getCommandSize());
-  for (int8_t i = 0; i < 10; ++i)
-    assertEqual(expected[i], buffer[i]);
+  assertEqual(String(expected), String(buffer));
 }
 
 /*
