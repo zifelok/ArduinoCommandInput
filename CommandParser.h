@@ -38,6 +38,7 @@ private:
     int16_t _errorPosition;
     int16_t _inputCount;
     bool put(char c);
+    void endCommand();
 };
 
 #endif

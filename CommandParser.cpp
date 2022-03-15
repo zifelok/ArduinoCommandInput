@@ -23,6 +23,8 @@ bool CommandParser::append(char c)
 
 bool CommandParser::put(char c)
 {
+    if (c == '\0')
+        return true;
     // Detect "
 
     // Detect special chars in str
@@ -66,8 +68,15 @@ void CommandParser::reset()
     _inputCount = 0;
 }
 
+void CommandParser::endCommand()
+{
+    if (_buffer[_inBuffer - 1] != '\0')
+        put(' ');
+}
+
 Command CommandParser::parse()
 {
+    endCommand();
     return Command(_buffer, _commandSize);
 }
 

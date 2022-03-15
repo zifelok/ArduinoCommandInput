@@ -4,8 +4,25 @@
 test(parse_returns_empty)
 {
   CommandParser cp(new char[1], 1);
+
   Command c = cp.parse();
+
   assertEqual(0, c.getCommandSize());
+}
+
+test(parse_append_puts_in_buffer)
+{
+  char *expected = "something";
+  char *buffer = new char[16]{};
+  CommandParser cp(buffer, 16);
+
+  cp.append("some");
+  cp.append("thing");
+  Command c = cp.parse();
+
+  assertEqual(1, c.getCommandSize());
+  for (int8_t i = 0; i < 10; ++i)
+    assertEqual(expected[i], buffer[i]);
 }
 
 /*
@@ -18,7 +35,6 @@ test(Array_OK)
     assertEqual(expected[i], buffer[i]);
 }
 */
-
 
 void setup()
 {
