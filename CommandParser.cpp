@@ -1,4 +1,4 @@
-#include "ATerminal.h"
+#include "CommandParser.h"
 
 CommandParser::CommandParser(char *buffer, int16_t bufferSize, char *commandEnding)
 {

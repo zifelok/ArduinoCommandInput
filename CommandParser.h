@@ -1,5 +1,5 @@
-#ifndef ATerminal_h
-#define ATerminal_h
+#ifndef CommandParser_h
+#define CommandParser_h
 
 #include "Arduino.h"
 
