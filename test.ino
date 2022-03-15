@@ -1,28 +1,17 @@
 #include "ATerminal.h"
 #include <AUnit.h>
 
-char *commandBuffer = new char[64]{'1', '2', '\0', 'a', '\0', 'g', '1', '\0', 'r'};
-Command testCommand = Command(commandBuffer, 3);
-
-test(command_keeps_size)
+/*
+test(Array_OK)
 {
-  assertEqual(3, testCommand.getSize());
+  int8_t n = 16;
+  char *expected = new char[16]{'1', '2', '\0', 'a', '\0', 'g', '1', '\0', 'r'};
+  char *buffer = new char[16]{'1', '2', '\0', 'a', '\0', 'g', '1', '\0', 'r'};
+  for (int8_t i = 0; i < n; ++i)
+    assertEqual(expected[i], buffer[i]);
 }
+*/
 
-test(command_iterator_works)
-{
-  testCommand.reset();
-  for (int8_t i = 0; i < 7; ++i)
-  {
-    assertEqual(F("12"), testCommand.current());
-    assertEqual(true, testCommand.moveNext());
-    assertEqual(F("a"), testCommand.current());
-    assertEqual(true, testCommand.moveNext());
-    assertEqual(F("g1"), testCommand.current());
-    assertEqual(false, testCommand.moveNext());
-    testCommand.reset();
-  }
-}
 
 void setup()
 {

@@ -7,39 +7,37 @@ class Command
 {
 public:
     Command(char *buffer, int8_t commandSize);
-    void reset();
-    bool hasNext();
-    bool moveNext();
-    char *current();
-    int8_t getSize();
+    int8_t getCommandSize();
 
 private:
     char *_buffer;
     int8_t _commandSize;
-    int8_t _commandIndex;
-    char *_argPointer;
 };
 
 class CommandParser
 {
 public:
     CommandParser(char *buffer, int16_t bufferSize, char *commandEnding = "\r\n");
-    void write(char c);
-    void parse(char *command);
+    // append single char
+    bool append(char c);
+    // append string
+    bool append(char *command);
+    // write single char and detect commandEnding
+    bool write(char c);
+    // reset buffer
     void reset();
-    void setCallback(void (*callback)(Command));
+    Command parse();
 
 private:
-    void (*_callback)(Command);
     char *_buffer;
     int16_t _bufferSize;
     char *_commandEnding;
-    int16_t _bufferEnd;
+    int16_t _inBuffer;
     int8_t _endingCount;
     int8_t _commandSize;
-
-    void endOfCommand();
-    bool putToBuffer(char c);
+    int16_t _errorPosition;
+    int16_t _inputCount;
+    bool put(char c);
 };
 
 #endif
