@@ -1,6 +1,13 @@
 #include "CommandParser.h"
 #include <AUnit.h>
 
+test(parse_returns_empty)
+{
+  CommandParser cp(new char[1], 1);
+  Command c = cp.parse();
+  assertEqual(0, c.getCommandSize());
+}
+
 /*
 test(Array_OK)
 {
