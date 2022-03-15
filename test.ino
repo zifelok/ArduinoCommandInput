@@ -40,6 +40,18 @@ test(parse_append_few)
   assertEqual("ola", String(c.get(2)));
 }
 
+test(parse_quotes)
+{
+  char *buffer = new char[16]{};
+  CommandParser cp(buffer, 16);
+
+  cp.append("\" some  thing \"");
+  Command c = cp.parse();
+
+  assertEqual(1, c.getCommandSize());
+  assertEqual(" some  thing ", String(c.get(0)));
+}
+
 /*
 test(Array_OK)
 {

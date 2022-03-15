@@ -23,14 +23,20 @@ bool CommandParser::append(char c)
 
 bool CommandParser::put(char c)
 {
+    // skip \0
     if (c == '\0')
         return true;
     // Detect "
+    if (c == '"')
+    {
+        _quotes = !_quotes;
+        return true;
+    }
 
     // Detect special chars in str
 
     // Detect spaces, and break with \0
-    if (c == ' ' || c == '\t')
+    if ((c == ' ' || c == '\t') && !_quotes)
     {
         if (_inBuffer == 0 || _buffer[_inBuffer - 1] == '\0')
             return true;
@@ -66,24 +72,33 @@ void CommandParser::reset()
     _commandSize = 0;
     _errorPosition = -1;
     _inputCount = 0;
+    _quotes = false;
 }
 
 void CommandParser::endCommand()
 {
     if (_buffer[_inBuffer - 1] != '\0')
         put(' ');
+    if (_quotes)
+    {
+        _errorPosition = _inputCount;
+    }
 }
 
 Command CommandParser::parse()
 {
     endCommand();
-    return Command(_buffer, _commandSize);
+    if (_errorPosition < 0)
+        return Command(_buffer, _commandSize);
+    else
+        return Command(NULL, 0, _errorPosition);
 }
 
-Command::Command(char *buffer, int8_t commandSize)
+Command::Command(char *buffer, int8_t commandSize, int16_t errorPosition)
 {
     _buffer = buffer;
     _commandSize = commandSize;
+    _errorPosition = errorPosition;
 }
 
 int8_t Command::getCommandSize()

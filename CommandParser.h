@@ -6,13 +6,14 @@
 class Command
 {
 public:
-    Command(char *buffer, int8_t commandSize);
+    Command(char *buffer, int8_t commandSize, int16_t errorPosition = -1);
     int8_t getCommandSize();
     char *get(int8_t i);
 
 private:
     char *_buffer;
     int8_t _commandSize;
+    int16_t _errorPosition;
 };
 
 class CommandParser
@@ -38,6 +39,7 @@ private:
     int8_t _commandSize;
     int16_t _errorPosition;
     int16_t _inputCount;
+    bool _quotes;
     bool put(char c);
     void endCommand();
 };
