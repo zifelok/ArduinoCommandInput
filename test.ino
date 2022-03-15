@@ -21,7 +21,20 @@ test(parse_append_puts_in_buffer)
   Command c = cp.parse();
 
   assertEqual(1, c.getCommandSize());
-  assertEqual(String(expected), String(buffer));
+  assertEqual("something", String(c.get(0)));
+}
+
+test(parse_append_few)
+{
+  char *buffer = new char[16]{};
+  CommandParser cp(buffer, 16);
+
+  cp.append("some");
+  cp.append("thing");
+  Command c = cp.parse();
+
+  assertEqual(1, c.getCommandSize());
+  assertEqual("something", String(buffer));
 }
 
 /*

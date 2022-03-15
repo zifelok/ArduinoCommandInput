@@ -8,6 +8,7 @@ class Command
 public:
     Command(char *buffer, int8_t commandSize);
     int8_t getCommandSize();
+    char *get(int8_t i);
 
 private:
     char *_buffer;
