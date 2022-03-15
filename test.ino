@@ -29,12 +29,15 @@ test(parse_append_few)
   char *buffer = new char[16]{};
   CommandParser cp(buffer, 16);
 
-  cp.append("some");
-  cp.append("thing");
+  cp.append(" some");
+  cp.append("   ");
+  cp.append("thing  ola");
   Command c = cp.parse();
 
-  assertEqual(1, c.getCommandSize());
-  assertEqual("something", String(buffer));
+  assertEqual(3, c.getCommandSize());
+  assertEqual("some", String(c.get(0)));
+  assertEqual("thing", String(c.get(1)));
+  assertEqual("ola", String(c.get(2)));
 }
 
 /*
