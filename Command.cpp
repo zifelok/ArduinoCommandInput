@@ -1,4 +1,12 @@
 #include "Command.h"
+//#define DEBUG
+#ifdef DEBUG
+#define DEBUG_PRINT(x) Serial.print(x)
+#define DEBUG_PRINTLN(x) Serial.println(x)
+#else
+#define DEBUG_PRINT(x)
+#define DEBUG_PRINTLN(x)
+#endif
 
 Command Command::parse(char *str)
 {
@@ -43,15 +51,32 @@ Command Command::build(char *str, char *buffer, uint16_t bufferSize)
     uint16_t inBuffer = 0;
     uint16_t i = 0;
     char last;
+    char current;
     while (str[i] != '\0')
     {
-        last = inBuffer == 0 ? '\0' : buffer[inBuffer];
-        
+        current = str[i];
+        DEBUG_PRINT("i:\t");
+        DEBUG_PRINT(i);
+        DEBUG_PRINT("\tinBuffer:\t");
+        DEBUG_PRINT(inBuffer);
+        DEBUG_PRINT("\tcurrent:\t");
+        DEBUG_PRINTLN(current);
+
+        ++i;
+        last = inBuffer == 0 ? '\0' : buffer[inBuffer - 1];
+
+        if (current == ' ' || current == '\t')
+        {
+            if (last != '\0')
+                buffer[inBuffer++] = '\0';
+
+            continue;            
+        }
+
         if (last == '\0')
             ++commandSize;
 
-        buffer[inBuffer++] = last = str[i];
-        ++i;
+        buffer[inBuffer++] = current;
     }
 
     buffer[inBuffer++] = '\0';
