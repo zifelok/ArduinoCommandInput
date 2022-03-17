@@ -5,25 +5,25 @@ Command Command::parse(char *str)
     return Command(str, 0);
 }
 
-Command Command::parse(char *str, char *buffer, int16_t bufferSize)
+Command Command::parse(char *str, char *buffer, uint16_t bufferSize)
 {
     return Command(str, 0);
 }
 
-Command::Command(char *buffer, int8_t commandSize)
+Command::Command(char *buffer, uint8_t commandSize)
 {
     _buffer = buffer;
     _commandSize = commandSize;
 }
 
-int8_t Command::getCommandSize()
+uint8_t Command::getCommandSize()
 {
     return _commandSize;
 }
 
-char *Command::get(int8_t i)
+char *Command::get(uint8_t i)
 {
-    if (i < 0 || i >= _commandSize)
+    if (i >= _commandSize)
         return NULL;
     char *c = _buffer;
     while (i > 0)

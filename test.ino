@@ -9,6 +9,15 @@ test(parse_empty){
   assertEqual(0, c.getCommandSize());
 }
 
+test(parse_single){
+  char *str = "some";
+
+  Command c = Command::parse(str);
+
+  assertEqual(1, c.getCommandSize());
+  assertEqual("some", String(c.get(0)));
+}
+
 /*
 test(parse_returns_empty)
 {
