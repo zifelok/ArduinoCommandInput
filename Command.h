@@ -12,9 +12,10 @@ public:
     char *get(uint8_t i);
 
 private:
-    Command(char *buffer, uint8_t _commandSize);
     char *_buffer;
     uint8_t _commandSize;
+    Command(char *buffer, uint8_t _commandSize);
+    static Command build(char *str, char *buffer, uint16_t bufferSize);
 };
 
 #endif

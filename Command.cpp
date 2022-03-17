@@ -2,12 +2,12 @@
 
 Command Command::parse(char *str)
 {
-    return Command(str, 0);
+    return Command::build(str, str, 0xFFFF);
 }
 
 Command Command::parse(char *str, char *buffer, uint16_t bufferSize)
 {
-    return Command(str, 0);
+    return Command::build(str, buffer, bufferSize);
 }
 
 Command::Command(char *buffer, uint8_t commandSize)
@@ -35,4 +35,25 @@ char *Command::get(uint8_t i)
         --i;
     }
     return c;
+}
+
+Command Command::build(char *str, char *buffer, uint16_t bufferSize)
+{
+    uint8_t commandSize = 0;
+    uint16_t inBuffer = 0;
+    uint16_t i = 0;
+    char last;
+    while (str[i] != '\0')
+    {
+        last = inBuffer == 0 ? '\0' : buffer[inBuffer];
+        
+        if (last == '\0')
+            ++commandSize;
+
+        buffer[inBuffer++] = last = str[i];
+        ++i;
+    }
+
+    buffer[inBuffer++] = '\0';
+    return Command(buffer, commandSize);
 }
