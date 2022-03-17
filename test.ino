@@ -33,6 +33,19 @@ test(parse_few)
   assertEqual("arguments", String(c.get(3)));
 }
 
+test(parse_few_with_extra_space)
+{
+  char *str = "   some command\t with    arguments   ";
+
+  Command c = Command::parse(str);
+
+  assertEqual(4, c.getCommandSize());
+  assertEqual("some", String(c.get(0)));
+  assertEqual("command", String(c.get(1)));
+  assertEqual("with", String(c.get(2)));
+  assertEqual("arguments", String(c.get(3)));
+}
+
 void setup()
 {
   Serial.begin(115200);
