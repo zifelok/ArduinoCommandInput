@@ -1,6 +1,15 @@
-#include "CommandParser.h"
+#include "Command.h"
 #include <AUnit.h>
 
+test(parse_empty){
+  char *str = "";
+
+  Command c = Command::parse(str);
+
+  assertEqual(0, c.getCommandSize());
+}
+
+/*
 test(parse_returns_empty)
 {
   CommandParser cp(new char[1], 1);
@@ -51,6 +60,20 @@ test(parse_quotes)
   assertEqual(1, c.getCommandSize());
   assertEqual(" some  thing ", String(c.get(0)));
 }
+
+test(parse_quotes_few)
+{
+  char *buffer = new char[16]{};
+  CommandParser cp(buffer, 16);
+
+  cp.append("la \"some  thing\" \" lol \"");
+  Command c = cp.parse();
+
+  assertEqual(3, c.getCommandSize());
+  assertEqual("la", String(c.get(0)));
+  assertEqual("some  thing", String(c.get(1)));
+  assertEqual(" lol ", String(c.get(2)));
+}*/
 
 /*
 test(Array_OK)
