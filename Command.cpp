@@ -20,12 +20,14 @@ Command::Command(char *str, char *buffer, uint16_t bufferSize)
 
 uint8_t Command::getCount()
 {
-    return _count;
+    if (_status == CommandStatus::successful)
+        return _count;
+    return 0;
 }
 
 char *Command::get(uint8_t i)
 {
-    if (i >= _count)
+    if (i >= getCount())
         return NULL;
     char *c = _buffer;
     while (i > 0)
@@ -45,6 +47,8 @@ void Command::build(char *str, char *buffer, uint16_t bufferSize)
     _bufferSize = bufferSize;
     _count = 0;
     _inBuffer = 0;
+    _status = CommandStatus::successful;
+    _errorPosition = 0;
 
     uint16_t i = 0;
     char last;
@@ -52,6 +56,10 @@ void Command::build(char *str, char *buffer, uint16_t bufferSize)
     bool quotes = false;
     while (str[i] != '\0')
     {
+        if (_status != CommandStatus::successful)
+            return;
+
+        _errorPosition;
         current = str[i];
         ++i;
 
@@ -92,6 +100,7 @@ void Command::build(char *str, char *buffer, uint16_t bufferSize)
                 break;
 
             default:
+                _status = CommandStatus::errorAtPosition;
                 break;
             }
 
@@ -100,23 +109,41 @@ void Command::build(char *str, char *buffer, uint16_t bufferSize)
 
         put(current);
     }
+    if (quotes)
+        _status = CommandStatus::errorAtPosition;
 
     put('\0');
 }
 
-bool Command::put(char c)
+void Command::put(char c)
 {
     if (c == '\0' && getLast() == '\0')
-        return true;
+        return;
+
     if (_inBuffer >= _bufferSize)
-        return false;
+    {
+        _status = CommandStatus::outOfBufferError;
+        return;
+    }
+
     _buffer[_inBuffer++] = c;
     if (c == '\0')
         ++_count;
-    return true;
 }
 
 char Command::getLast()
 {
     return _inBuffer == 0 ? '\0' : _buffer[_inBuffer - 1];
+}
+
+CommandStatus Command::getStatus()
+{
+    return _status;
+}
+
+uint16_t Command::getErrorPosition()
+{
+    if (_status == CommandStatus::errorAtPosition)
+        return _errorPosition;
+    return 0xFFFF;
 }

@@ -68,7 +68,16 @@ test(parse_scopes_reads_special_chars)
   assertEqual("\"\r\n", String(c.get(2)));
   assertEqual("after'", String(c.get(3)));
 }
+/*
+test(parse_unknown_char_after_slash)
+{
+  Command c = Command("\"0123\\56\"", buffer, bufferSize);
 
+  assertEqual(0, c.getCount());
+  assertEqual(CommandStatus::errorAtPosition, c.getStatus());
+  assertEqual(5, c.getErrorPosition());
+}
+*/
 void setup()
 {
   Serial.begin(115200);
