@@ -59,7 +59,7 @@ void Command::build(char *str, char *buffer, uint16_t bufferSize)
         if (_status != CommandStatus::successful)
             return;
 
-        _errorPosition;
+        _errorPosition = i;
         current = str[i];
         ++i;
 
