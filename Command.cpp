@@ -52,6 +52,7 @@ Command Command::build(char *str, char *buffer, uint16_t bufferSize)
     uint16_t i = 0;
     char last;
     char current;
+    bool quotes = false;
     while (str[i] != '\0')
     {
         current = str[i];
@@ -65,12 +66,18 @@ Command Command::build(char *str, char *buffer, uint16_t bufferSize)
         ++i;
         last = inBuffer == 0 ? '\0' : buffer[inBuffer - 1];
 
-        if (current == ' ' || current == '\t')
+        if (current == '"')
+        {
+            quotes = !quotes;
+            continue;
+        }
+
+        if (!quotes && (current == ' ' || current == '\t'))
         {
             if (last != '\0')
                 buffer[inBuffer++] = '\0';
 
-            continue;            
+            continue;
         }
 
         if (last == '\0')
