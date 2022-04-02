@@ -58,6 +58,17 @@ test(parse_scopes_keeps_format)
   assertEqual("after", String(c.get(2)));
 }
 
+test(parse_scopes_reads_special_chars)
+{
+  Command c = Command("before \"la2 \\\\ \\t la2\" \"\\\"\\r\\n\" after'", buffer, bufferSize);
+
+  assertEqual(4, c.getCount());
+  assertEqual("before", String(c.get(0)));
+  assertEqual("la2 \\ \t la2", String(c.get(1)));
+  assertEqual("\"\r\n", String(c.get(2)));
+  assertEqual("after'", String(c.get(3)));
+}
+
 void setup()
 {
   Serial.begin(115200);

@@ -77,6 +77,35 @@ void Command::build(char *str, char *buffer, uint16_t bufferSize)
             continue;
         }
 
+        if (quotes && current == '\\')
+        {
+            current = str[i];
+            ++i;
+            switch (current)
+            {
+            case '\"':
+                put('\"');
+                break;
+            case '\\':
+                put('\\');
+                break;
+            case 'n':
+                put('\n');
+                break;
+            case 'r':
+                put('\r');
+                break;
+            case 't':
+                put('\t');
+                break;
+
+            default:
+                break;
+            }
+
+            continue;
+        }
+
         put(current);
     }
 
