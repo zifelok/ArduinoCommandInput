@@ -54,14 +54,6 @@ void Command::build(char *str, char *buffer, uint16_t bufferSize)
     {
         current = str[i];
         ++i;
-        /*
-        DEBUG_PRINT("i:\t");
-        DEBUG_PRINT(i);
-        DEBUG_PRINT("\tinBuffer:\t");
-        DEBUG_PRINT(_inBuffer);
-        DEBUG_PRINT("\tcurrent:\t");
-        DEBUG_PRINTLN(current);
-        */
 
         if (current == '"')
         {
