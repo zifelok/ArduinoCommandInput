@@ -6,16 +6,20 @@
 class Command
 {
 public:
-    static Command parse(char *str);
-    static Command parse(char *str, char *buffer, uint16_t bufferSize);
-    uint8_t getCommandSize();
+    Command(char *str);
+    Command(char *str, char *buffer, uint16_t bufferSize);
+    uint8_t getCount();
     char *get(uint8_t i);
 
 private:
     char *_buffer;
-    uint8_t _commandSize;
-    Command(char *buffer, uint8_t _commandSize);
-    static Command build(char *str, char *buffer, uint16_t bufferSize);
+    uint16_t _bufferSize;
+    uint16_t _inBuffer;
+    uint8_t _count;
+    Command(char *buffer, uint16_t bufferSize);
+    void build(char *str, char *buffer, uint16_t bufferSize);
+    bool put(char c);
+    char getLast();
 };
 
 #endif

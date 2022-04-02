@@ -8,30 +8,24 @@
 #define DEBUG_PRINTLN(x)
 #endif
 
-Command Command::parse(char *str)
+Command::Command(char *str)
 {
-    return Command::build(str, str, 0xFFFF);
+    build(str, str, 0xFFFF);
 }
 
-Command Command::parse(char *str, char *buffer, uint16_t bufferSize)
+Command::Command(char *str, char *buffer, uint16_t bufferSize)
 {
-    return Command::build(str, buffer, bufferSize);
+    build(str, buffer, bufferSize);
 }
 
-Command::Command(char *buffer, uint8_t commandSize)
+uint8_t Command::getCount()
 {
-    _buffer = buffer;
-    _commandSize = commandSize;
-}
-
-uint8_t Command::getCommandSize()
-{
-    return _commandSize;
+    return _count;
 }
 
 char *Command::get(uint8_t i)
 {
-    if (i >= _commandSize)
+    if (i >= _count)
         return NULL;
     char *c = _buffer;
     while (i > 0)
@@ -45,10 +39,13 @@ char *Command::get(uint8_t i)
     return c;
 }
 
-Command Command::build(char *str, char *buffer, uint16_t bufferSize)
+void Command::build(char *str, char *buffer, uint16_t bufferSize)
 {
-    uint8_t commandSize = 0;
-    uint16_t inBuffer = 0;
+    _buffer = buffer;
+    _bufferSize = bufferSize;
+    _count = 0;
+    _inBuffer = 0;
+
     uint16_t i = 0;
     char last;
     char current;
@@ -56,15 +53,15 @@ Command Command::build(char *str, char *buffer, uint16_t bufferSize)
     while (str[i] != '\0')
     {
         current = str[i];
+        ++i;
+        /*
         DEBUG_PRINT("i:\t");
         DEBUG_PRINT(i);
         DEBUG_PRINT("\tinBuffer:\t");
-        DEBUG_PRINT(inBuffer);
+        DEBUG_PRINT(_inBuffer);
         DEBUG_PRINT("\tcurrent:\t");
         DEBUG_PRINTLN(current);
-
-        ++i;
-        last = inBuffer == 0 ? '\0' : buffer[inBuffer - 1];
+        */
 
         if (current == '"')
         {
@@ -74,18 +71,31 @@ Command Command::build(char *str, char *buffer, uint16_t bufferSize)
 
         if (!quotes && (current == ' ' || current == '\t'))
         {
-            if (last != '\0')
-                buffer[inBuffer++] = '\0';
+            if (getLast() != '\0')
+                put('\0');
 
             continue;
         }
 
-        if (last == '\0')
-            ++commandSize;
-
-        buffer[inBuffer++] = current;
+        put(current);
     }
 
-    buffer[inBuffer++] = '\0';
-    return Command(buffer, commandSize);
+    put('\0');
+}
+
+bool Command::put(char c)
+{
+    if (c == '\0' && getLast() == '\0')
+        return true;
+    if (_inBuffer >= _bufferSize)
+        return false;
+    _buffer[_inBuffer++] = c;
+    if (c == '\0')
+        ++_count;
+    return true;
+}
+
+char Command::getLast()
+{
+    return _inBuffer == 0 ? '\0' : _buffer[_inBuffer - 1];
 }
