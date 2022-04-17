@@ -1,4 +1,5 @@
 #include "Command.h"
+#include "CommandInput.h"
 #include <AUnit.h>
 
 char *buffer = new char[64];
