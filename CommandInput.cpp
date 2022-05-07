@@ -3,8 +3,9 @@
 CommandInput::CommandInput(char *buffer, uint16_t bufferSize, char *commandSeparator)
 {
     _buffer = buffer;
-    _bufferSize = _bufferSize;
+    _bufferSize = bufferSize;
     _separator = commandSeparator;
+    _separatorSize = 0;
     while (_separator[_separatorSize] != '\0')
         _separatorSize++;
     reset();
